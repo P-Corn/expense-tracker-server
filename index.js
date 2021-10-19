@@ -23,7 +23,11 @@ MongoClient.connect(connectionString)
   });
  
   app.get('/expenses', (req, res) => {
-  
+    db.collection('expenses').find().toArray()
+      .then(results => {
+        res.send(results);
+      })
+      .catch(error => console.error(error))
   });
 })
 .catch(error => console.error(error))
