@@ -1,36 +1,40 @@
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+const app = express();
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const app = express();
+// Schemas
+const Expense = require('./models/Expense');
 
 app.use(cors());
 app.use(bodyParser.json());
 
 const connectionString = 'mongodb+srv://peyton123:peyton1234@cluster0.e5iad.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
-MongoClient.connect(connectionString)
-.then(client => {
-  const db = client.db('expense-tracker');
-  const expensesCollection = db.collection('expenses');
+main().catch(err => console.log(err));
 
-  app.post('/expenses', (req, res) => {
-    expensesCollection.insertOne(req.body)
-      .then(() => {
-        res.send(req.body);
-      })
-      .catch(error => console.error(error))
+async function main() {
+  await mongoose.connect(connectionString);
+
+  app.post('/expenses', async (req, res) => {
+    try {
+      const newExpense = await Expense.create({...req.body});
+      const savedExpense = await newExpense.save();
+      res.send(savedExpense);
+    } catch (err) {
+      res.send(err);
+    }
   });
- 
-  app.get('/expenses', (req, res) => {
-    db.collection('expenses').find().toArray()
-      .then(results => {
-        res.send(results);
-      })
-      .catch(error => console.error(error))
+
+  app.get('/expenses', async (req, res) => {
+    try {
+      const expenses = await Expense.find();
+      res.send(expenses);
+    } catch (err) {
+      res.send(err);
+    }
   });
-})
-.catch(error => console.error(error))
+}
 
 app.listen(3001, () => {
     console.log('running');
