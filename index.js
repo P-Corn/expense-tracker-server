@@ -34,6 +34,15 @@ async function main() {
       res.send(err);
     }
   });
+
+  app.delete('/expenses', (req, res) => {
+    const id = req.body.expense._id;
+    console.log(id);
+    // try {
+    //   const deletedExpense = Expense.findByIdAndDelete()
+    // }
+  });
+
 }
 
 app.listen(3001, () => {
