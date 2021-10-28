@@ -21,28 +21,22 @@ async function main() {
       const newExpense = await Expense.create({...req.body});
       const savedExpense = await newExpense.save();
       res.send(savedExpense);
-    } catch (err) {
-      res.send(err);
-    }
+    } catch (err) { res.send(err); }
   });
 
   app.get('/expenses', async (req, res) => {
     try {
       const expenses = await Expense.find();
       res.send(expenses);
-    } catch (err) {
-      res.send(err);
-    }
+    } catch (err) { res.send(err); }
   });
 
-  app.delete('/expenses', (req, res) => {
-    const id = req.body.expense._id;
-    console.log(id);
-    // try {
-    //   const deletedExpense = Expense.findByIdAndDelete()
-    // }
+  app.delete('/expenses', async (req, res) => {
+    try {
+      const deletedExpense = await Expense.findByIdAndDelete(req.body.id);
+      res.send(deletedExpense);
+    } catch(err) { res.send(err); }
   });
-
 }
 
 app.listen(3001, () => {
