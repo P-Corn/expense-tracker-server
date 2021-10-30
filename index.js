@@ -31,6 +31,16 @@ async function main() {
     } catch (err) { res.send(err); }
   });
 
+  app.put('/expenses', async (req, res) => {
+    try {
+      // const updatedExpense = await Expense.findOneAndUpdate(
+      //   {_id: req.body.}
+      // );
+      // res.send(expenses);
+      console.log(req.body)
+    } catch (err) { res.send(err); }
+  });
+
   app.delete('/expenses', async (req, res) => {
     try {
       const deletedExpense = await Expense.findByIdAndDelete(req.body.id);
