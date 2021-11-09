@@ -26,18 +26,25 @@ async function main() {
 
   app.get('/expenses', async (req, res) => {
     try {
-      const expenses = await Expense.find();
+      const expenses = await Expense.find().sort({date: -1});
       res.send(expenses);
     } catch (err) { res.send(err); }
   });
 
   app.put('/expenses', async (req, res) => {
     try {
-      // const updatedExpense = await Expense.findOneAndUpdate(
-      //   {_id: req.body.}
-      // );
-      // res.send(expenses);
-      console.log(req.body)
+      const updatedExpense = await Expense.findOneAndUpdate(
+        { _id: req.body.id },
+        { 
+          amount: req.body.amount,
+          title: req.body.title,
+          description: req.body.description,
+          category: req.body.category,
+          date: req.body.date
+        },
+        { new: true }
+        );
+      res.send(updatedExpense);
     } catch (err) { res.send(err); }
   });
 
