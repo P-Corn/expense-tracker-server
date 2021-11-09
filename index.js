@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const dayjs = require('dayjs');
 // Schemas
 const Expense = require('./models/Expense');
 
@@ -25,6 +26,11 @@ async function main() {
   });
 
   app.get('/expenses', async (req, res) => {
+    if (dayjs(req.body).isValid()) {
+      console.log("it's a date")
+      return;
+    }
+    console.log(req.body)
     try {
       const expenses = await Expense.find().sort({date: -1});
       res.send(expenses);
