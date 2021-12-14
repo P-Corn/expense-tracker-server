@@ -3,7 +3,6 @@ const Category = require('../models/Category');
 module.exports = function(app) {
   app.post('/categories', async (req, res) => {
   try {
-    console.log(req.body)
     const newCategory = await Category.create({...req.body});
     const savedCategory = await newCategory.save();
     res.send(savedCategory);
@@ -33,7 +32,6 @@ module.exports = function(app) {
 
   app.delete('/categories', async (req, res) => {
     try {
-      console.log(req.body)
       const deletedCategory = await Category.findByIdAndDelete(req.body.id);
       res.send(deletedCategory);
     } catch(err) { res.send(err); }
